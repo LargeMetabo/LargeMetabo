@@ -1,16 +1,20 @@
-### Hi there 👋
+# LargeMetabo: an R package for Data Integration, Biomarker Identification, Metabolite Annotation and Enrichment Analysis in Large-Scale Metabolomics
 
-<!--
-**LargeMetabo/LargeMetabo** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
-Here are some ideas to get you started:
+### System requirements
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Dependent on R (>= 3.5.0)
+
+If you did not install the R software yet,you can download R >= 3.5.0  from https://www.r-project.org
+
+### Installation
+     
+The LargeMetabo package is provided through GitHub. In order to install it, devtools package available in CRAN (https://cran.r-project.org/) is required. To install devtools, the user must type the following commands in an R session:
+    
+    install.packages("devtools")
+    library(devtools)
+
+Once devtools package has been installed, the user can install LargeMetabo package by typing the following commands in an R session:
+
+    install_github("LargeMetabo/LargeMetabo", force = TRUE)
+    library(LargeMetabo)
