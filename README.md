@@ -1,4 +1,4 @@
-# LargeMetabo: an R package for Data Integration, Biomarker Identification, Metabolite Annotation and Enrichment Analysis in Large-Scale Metabolomics
+# LargeMetabo: an R package for data integration, biomarker identification, metabolite annotation and enrichment analysis in large-scale metabolomics
 
 
 ### System requirements
