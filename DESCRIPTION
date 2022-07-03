@@ -1,6 +1,6 @@
 Package: LargeMetabo
 Type: Package
-Title: an R package for Data Integration, Biomarker Identification, Metabolite Annotation and Enrichment Analysis in Large-Scale Metabolomics
+Title: LargeMetabo: an out-of-the-box tool for processing and analyzing large-scale metabolomic data
 Version: 0.1.0
 Author: Qingxia Yang
 Maintainer: Qingxia Yang <yangqx@cqu.edu.cn>
