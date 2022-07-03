@@ -7,7 +7,7 @@ Maintainer: Qingxia Yang <yangqx@cqu.edu.cn>
 Depends: R (>= 3.5.0), dynamicTreeCut (>= 1.62), fastcluster
 Imports: genefilter, d3heatmap, ggplot2, ggfortify, factoextra, igraph, FSelector, varSelRF, corrplot, mixOmics, ropls, CluMSID, siggenes, e1071, SOMbrero
 Suggests: knitr, rmarkdown
-Description: CluMSID and d3heatmap package should be installed. CluMSID is available on Bioconductor, and d3heatmap is available on GitHub
+Description: CluMSID, genefilter, ropls and siggenes are available on Bioconductor, d3heatmap is available on GitHub, and the rest packages including corrplot, e1071, factoextra, FSelector, ggfortify, ggplot2, igraph, MASS, mixOmics, SOMbrero and varSelRF are available on CRAN.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
