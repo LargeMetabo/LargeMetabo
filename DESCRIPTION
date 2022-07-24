@@ -1,0 +1,15 @@
+Package: LargeMetabo
+Type: Package
+Title: LargeMetabo: an out-of-the-box tool for processing and analyzing large-scale metabolomic data
+Version: 0.1.0
+Author: Qingxia Yang
+Maintainer: Qingxia Yang <yangqx@cqu.edu.cn>
+Depends: R (>= 3.5.0), dynamicTreeCut (>= 1.62), fastcluster
+Imports: AUC, genefilter, d3heatmap, ggplot2, ggfortify, factoextra, igraph, FSelector, varSelRF, corrplot, mixOmics, ropls, CluMSID, siggenes, e1071, SOMbrero, sampling
+Suggests: knitr, rmarkdown
+Description: CluMSID, genefilter, ropls and siggenes are available on Bioconductor, d3heatmap is available on GitHub, and the rest packages including AUC, corrplot, e1071, factoextra, FSelector, ggfortify, ggplot2, igraph, MASS, mixOmics, sampling, SOMbrero and varSelRF are available on CRAN.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+VignetteBuilder: knitr
