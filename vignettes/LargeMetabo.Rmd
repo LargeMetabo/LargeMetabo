@@ -1,0 +1,283 @@
+---
+title: "LargeMetabo: process and analyze large-scale metabolomic data"
+#author: Qingxia Yang, Bo Li, Panpan Wang, Jicheng Xie, Yuhao Feng, Ziqiang Liu, Feng Zhu
+#date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{LargeMetabo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{LargeMetabo, magrittr, dplyr, readr}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+<style>
+p.caption {
+    font-size: 80%;
+    text-align: left;
+}
+</style>
+
+###
+###
+
+
+## Introduction
+This tutorial shows how to use the `LargeMetabo` package for processing and analyzing large-scale metabolomic data. For the LargeMetabo Package, several R packages are utilized in the background processes, including CluMSID, corrplot, d3heatmap, e1071, factoextra, FSelector, genefilter, ggfortify, ggplot2, igraph, MASS, mixOmics, ropls, siggenes, SOMbrero, and varSelRF. Particularly, 
+CluMSID, genefilter, ropls and siggenes are available on Bioconductor, d3heatmap is available on GitHub, and the rest packages are available on CRAN. These packages can be installed as follows:
+
+```{r load_package_0, eval=FALSE}
+install.packages(c("corrplot", "e1071", "factoextra", "FSelector", "genefilter", "ggfortify",
+                   "ggplot2", "igraph", "MASS", "mixOmics", "SOMbrero", "varSelRF"))
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install(c("CluMSID","genefilter","ropls","siggenes", "GenomeInfoDbData"))
+
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("rstudio/d3heatmap")
+```
+
+
+The LargeMetabo package is provided through GitHub. In order to install it, devtools package available in CRAN (https://cran.r-project.org/) is required. The devtools package can be installed as follows:
+
+```{r load_package_2, eval=FALSE}
+install.packages("devtools")
+library(devtools)
+```
+
+
+Once devtools package has been installed, the LargeMetabo package can be installed as follows:
+
+```{r load_package_3, eval=FALSE}
+install_github("LargeMetabo/LargeMetabo", force = TRUE)
+```
+
+```{r load_package_4, warning=FALSE, message=FALSE}
+library(LargeMetabo)
+```
+
+
+
+## Data Integration for Multiple Analytical Experiments
+
+For data integration, multiple datasets from different analytical experiments can be used as the input of the LargeMetabo package. Before data integration, the csv files containing a feature-by-sample matrix should be prepared in advance. Each dataset (csv file) contains five essential columns providing the information of mass, retention time, intensity, isotope and adduct. The first two columns provide the mass and retention time, and samples must be kept in columns with the sample names in the first row. The group label in the second row indicates distinct sample groups, such as case and control. Input data values (mass, retention time, intensity) should be numeric, and a blank cell or “NA” should be adopted to indicate any missing values.
+An example input file with the corresponding contents separated by comma is provided in the LargeMetabo package. This example data can be autoloaded by the object of mutile_Group when using this package. In the mutile_Group object, there are three datasets as input of data integration. Both three datasets named batch_data_1.csv, batch_data_2.csv and batch_data_3.csv and a RData file named mutile_Group.RData are provided the same information for users in the package.
+
+The `Integrate_Data()` function requires several arguments:
+
+* `MutileGroup`: Multiple datasets from multiple groups for integrating as a comprehensive dataset.
+* `RTTolerance1`: Set the tolerance of retention time for data integration in the primary phase.
+* `mzTolerance1`: Set the tolerance of mass-to-charge ratio for data integration in the primary phase.
+* `RTTolerance2`: Set the tolerance of retention time for data integration in the secondary phase.
+* `mzTolerance2`: Set the tolerance of mass-to-charge ratio for data integration in the secondary phase.
+
+
+```{r Integration_package_1, warning=FALSE, message=FALSE}
+AlignData <- Integrate_Data(MutileGroup, RTTolerance1 = 10, mzTolerance1 = 0.1,
+                               RTTolerance2 = 10, mzTolerance2 = 0.1)
+AlignData[1:5,1:5]
+```
+
+
+
+## Batch Effects Removal after Data Integration
+
+After data integration, it was essential to remove the unwanted variations among different batches. Various methods are provided in the LargeMetabo package for removing batch effects in different analytical experiments, including batch mean-centering (BMC/PAMR), the empirical Bayes method (ComBat/EB), and global normalization (GlobalNorm). An example input file for batch effect removal is provided in the LargeMetabo package. After integrating multiple datasets, the data can be autoloaded in the mutile_align object for removing batch effects. And the RData file mutile_align.RData and mutile_align.csv can provide the input file for batch effect removal.
+
+The `Removal_Batch()` function requires several arguments:
+
+* `MutileAlign`: The comprehensive dataset integrated from multiple groups.
+* `n`: The number of multiple groups.
+* `algorithm`: The algorithm for removing batch effects in multiple groups. The algorithm could be BMC/PAMR, ComBat/EB, GlobalNorm or None.
+
+
+```{r Batch_package_1, warning=FALSE, message=FALSE}
+DataAfterBatch <- Removal_Batch(MutileAlign, n = 3, algorithm = "BMC/PAMR")
+DataAfterBatch[1:5,1:5]
+```
+
+
+## Sample Separation
+
+There are four sample separation methods for visualizing the clustering and separation of different samples. In the LargeMetabo package, the four methods are provided for sample separation. An example input file for sample separation is provided in the LargeMetabo package.
+
+The `Sample_Separation()` function requires several arguments:
+
+* `finalData`: The matrix of dataset for sample separation.
+* `finalLabel`: The label of dataset for sample separation.
+* `clusters`: The number of cluster for sample separation.
+* `method`: The method for sample separation. The method could be HCA, KMC, PCA and SOM.
+
+
+```{r Separation_package_1, warning=FALSE, message=FALSE, fig.width=7, fig.height=5}
+finalData <- MarkerData$finalData
+finalLabel <- MarkerData$finalLabel
+Sample_Separation(finalData, finalLabel, clusters = 2, method = "HCA")
+```
+
+
+
+## Marker Identification
+
+In the marker identification step, there are 13 popular strategies to identify metabolic markers for the given dataset. These strategies include fold change (FC), partial least squares discrimination analysis (PLS-DA), orthogonal PLS-DA (OPLS-DA), Student’s t-test, Chi-squared test, correlation-based feature selection (CFS), entropy-based filter method, linear models and empirical Bayes method, recursive elimination of features (Relief), random forest-recursive feature elimination (RF-RFE), significance analysis for microarrays (SAM), support vector machine-recursive feature elimination (SVM-RFE), and Wilcoxon rank sum (WRS). An example input file for marker identification is provided in the LargeMetabo package.
+
+The `Marker_Identify()` function requires several arguments:
+
+* `finalData`: The matrix of dataset for sample separation.
+* `finalLabel`: The label of dataset for sample separation.
+* `method`: The method for marker identification. The method could be FC, PLS-DA, OPLS-DA, t-test, CHIS, CFS, ENTROPY, LMEB, RELIEF, RF, SAM, SVMRFE or WRST.
+
+
+```{r Marker_package_1, warning=FALSE, message=FALSE, fig.width=7, fig.height=5}
+finalData <- MarkerData$finalData
+finalLabel <- MarkerData$finalLabel
+MarkerResult <- Marker_Identify(finalData, finalLabel, method = "FC")
+MarkerResult$FC_table[1:5,]
+```
+
+
+The `Marker_Assess()` function requires several arguments:
+
+* `finalData`: The matrix of dataset for sample separation.
+* `finalLabel`: The label of dataset for sample separation.
+* `method`: The method for marker identification. The method could be FC, PLS-DA, OPLS-DA, t-test, CHIS, CFS, ENTROPY, LMEB, RELIEF, RF, SAM, SVMRFE or WRST.
+
+
+```{r Marker_package_2, warning=FALSE, message=FALSE, fig.width=7, fig.height=5}
+Marker_Assess(finalData, finalLabel, method = "PLS-DA")
+```
+
+
+
+## Metabolite Annotation for Primary Mass Spectrometry (MS1)
+
+In the LargeMetabo package, a database for enhanced annotation is provided for metabolite annotation. When performing metabolite annotation for primary mass spectrometry (MS1), a compound list containing the studied m/z features should be properly provided. An example input for metabolite annotation for primary mass spectrometry is provided in the LargeMetabo package.
+
+The `Metabo_Annotation()` function requires several arguments:
+
+* `AnnotaMS`: The value of mass-to-charge ratio for metabolite annotation.
+* `masstole`: The tolerance of m/z for metabolite annotation, and the unit is ppm of the parent mass.
+* `toleUnit`: The unit of m/z for metabolite annotation. The unit could be 1 for Da, or 2 for ppm.
+* `annotaDB`: The database of m/z for metabolite annotation. The database could be metlin or hmdb.
+* `ionMode`: The mode of m/z for annotation. The mode could be pos, neg or neu.
+
+```{r Annotation_package_1, warning=FALSE, message=FALSE}
+AnnotaMS <- AnnotaData$AnnotaMS
+MetaboAResult <- Metabo_Annotation(AnnotaMS, masstole = 10, toleUnit = 1, annotaDB = "metlin",
+                                   ionMode  = "pos")
+MetaboAResult$`M+H-2H2O`[1:5,]
+```
+
+
+
+## Metabolite Annotation for Tandem Mass Spectrometry (MS/MS)
+
+In the LargeMetabo package, when performing metabolite annotation for tandem mass spectrometry (MS/MS), the information containing parent ion mass and MS/MS peak list (the first column is m/z value and the second column is the intensity) should be properly provided in this study. An example input for metabolite annotation for tandem mass spectrometry is provided in the LargeMetabo package. These example data embedded in the LargeMetabo package include the parent ion mass (181.04) and MS/MS peak list (m/z & intensity). In this MS/MS peak list, the intensities are 0.588541, 2.974737, 100.000000, 2.710494, 2.722505, 36.241342, 2.382192 and 1.165072 for the peaks 122.0278, 123.0119, 140.0382, 141.0409, 142.0337, 182.0486, 183.0518 and 184.0452, respectively.
+
+
+The `Annota_Tandem()` function requires several arguments:
+
+* `ParentMass`: The value of parent ion mass for metabolite annotation of tandem mass spectrum.
+* `TandemData`: The value of MS/MS peak list (m/z & Intensity) for metabolite annotation of tandem mass spectrum.
+* `massTandem`: The tolerance of parent ion mass for metabolite annotation of tandem mass spectrum.
+* `toleUnitTandem`: The unit of parent ion mass for metabolite annotation of tandem mass spectrum. The unit could be 1 for Da, or 2 for ppm.
+* `massmzTandem`: The tolerance of MS/MS peak mass for metabolite annotation of tandem mass spectrum.
+* `toleUnitmzTandem`: The unit of MS/MS peak mass for metabolite annotation of tandem mass spectrum. The unit could be 1 for Da, or 2 for ppm.
+* `ModeTandem`: The ionization mode for metabolite annotation of tandem mass spectrum. The mode could be Positive or Negative.
+* `ionEnergy`: The CID energy for metabolite annotation of tandom mass spectrum. The mode could be low(10V) Medium(25V) High(40V) or All.
+
+
+
+The `annota_Data_Tandem()` function requires several arguments:
+
+* `AnnotaParamTandem `: The parameters of metabolite annotation of tandem mass spectrum.
+
+
+The `Annota_Tandem_plot()` function requires several arguments:
+
+* `AnnotaParamTandem `: The parameters of metabolite annotation of tandem mass spectrum.
+* `TandemData `: The value of MS/MS peak list (m/z & Intensity) for metabolite annotation of tandem mass spectrum.
+
+
+```{r TandemAnnotation_package_1, warning=FALSE, message=FALSE, fig.width=7, fig.height=5}
+ParentMass <- AnnotaData$ParentMass
+TandemData <- AnnotaData$TandomData
+AnnotaParamTandem <- Annota_Tandem(ParentMass, TandemData, massTandem = 0.1, toleUnitTandem = 1,
+                                   massmzTandem = 0.5, toleUnitmzTandem = 1, ModeTandem = "Positive",
+                                   ionEnergy = "low(10V)")
+annota_Data_Tandem(AnnotaParamTandem)[1:5,]
+Annota_Tandem_plot(AnnotaParamTandem, TandemData)
+```
+
+
+## Enrichment Analysis for KEGG Pathways
+
+In the LargeMetabo package, when performing enrichment analysis for KEGG pathways, a compound list should be properly provided. An example input for enrichment analysis for the KEGG pathways is provided in the LargeMetabo package.
+
+
+The `KEGG_Enrich_PlotPanel()` function requires several arguments:
+
+* `sampleDatakegg`: The charactor of input for metabolite enrichment.
+* `enrichDB`: The database of the input data. The database could be kegg, smpdb, cfam, foodb, biofunc, tcm, spectax or toxin.
+* `pvalcutoff`: The cutoff of p value for metabolite enrichment.
+* `IDtype`: The number for name type (1, 2, 3…) for metabolite enrichment, such as KEGG ID, CAS ID, PubChem ID, Name or HMDB ID. If enrichDB is 'kegg', IDtype is 1 (KEGG ID), 2 (CAS ID), 3 (PubChem ID), or 4 (Compound Name). If enrichDB is 'smpdb', IDtype is 1 (HMDB ID), 2 (KEGG ID), 3 (CAS ID), 4 (PubChem ID), or 5 (Compound Name). If enrichDB is 'cfam', IDtype is 1 (CFAM ID), 2 (CAS ID), 3 (PubChem ID), 4 (Compound Name), or 5 (HMDB ID). If enrichDB is 'foodb', IDtype is 1 (FoodDB ID), 2 (CAS ID), 3 (PubChem ID), 4 (Compound Name) or 5 (HMDB ID). If enrichDB is 'biofunc', IDtype is 1 (HMDB ID), 2 (KEGG ID), 3 (CAS ID), 4 (PubChem ID) or 5 (Compound Name). If enrichDB is 'tcm', IDtype is 1 (LargeMetabo ID), 2 (PubChem ID), 3(Compound Name), or 4 (CAS ID). If enrichDB is 'spectax', IDtype is 1 (LargeMetabo ID), 2 (PubChem ID), 3(Compound Name), 4 (CAS ID) or 5 (HMDB ID). If enrichDB is 'toxin', IDtype is 1 (T3DB ID), 2 (PubChem ID), 3 (Compound Name), 4 (CAS ID) 5 (HMDB ID) or 6 (KEGG ID).
+* `cateIdx`: The number of category for metabolite enrichment.
+
+
+The `Enrichment()` function requires several arguments:
+
+* `EnrichParam`: The parameters for metabolite enrichment.
+
+
+The `KEGG_Enrich_Plot()` function requires several arguments:
+
+* `EnrichResultList`: The table of results for metabolite enrichment using KEGG database.
+* `cpdID`: The character of input for metabolite enrichment.
+* `cpdFC`: The distance in the metabolite enrichment plot using KEGG database.
+
+
+
+```{r KEGGEnrich_package_1, warning=FALSE, message=FALSE, fig.width=8.5, fig.height=8}
+sampleDatakegg <- EnrichData$sampleDatakegg
+EnrichParam <- KEGG_Enrich_PlotPanel(sampleDatakegg, enrichDB = "kegg", pvalcutoff = 0.05,
+                                   IDtype = 1, cateIdx = 1)
+EnrichResultList <- Enrichment(EnrichParam)
+EnrichFC <- seq(from = -2,to = 2, length.out = 24)
+KEGG_Enrich_Plot(EnrichResultList = EnrichResultList, cpdID = sampleDatakegg, cpdFC = EnrichFC)
+```
+
+## Enrichment Analysis for other Databases
+In the LargeMetabo package, when performing enrichment analysis for databases other than KEGG pathways, a compound list should also be properly provided. An example input for enrichment analysis for the classes of food components and food additives is provided in the LargeMetabo package.
+
+
+The `EnrichPlot()` function requires several arguments:
+
+* `dbChoice`: The database of input for metabolite enrichment.
+* `EnrichResultList`: The table of results for metabolite enrichment.
+
+
+```{r Enrich_package_1, warning=FALSE, message=FALSE, fig.width=7, fig.height=5}
+sampleDatacas <- EnrichData$sampleDatacas
+enrichDB <- EnrichData$enrichDB
+EnrichParam <- KEGG_Enrich_PlotPanel(sampleDatacas, enrichDB = enrichDB, pvalcutoff = 0.05,
+                                   IDtype = 2, cateIdx = 1)
+EnrichResultList <- Enrichment(EnrichParam)
+dbChoice <- enrichDB
+Enrich_Plot(dbChoice, EnrichResultList)
+```
+
+
+
+
+
+
+
+
+
