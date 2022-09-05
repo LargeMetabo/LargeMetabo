@@ -5,7 +5,7 @@ title: "LargeMetabo: process and analyze large-scale metabolomic data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{LargeMetabo}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{LargeMetabo, magrittr, dplyr, readr}
 ---
