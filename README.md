@@ -9,6 +9,16 @@ If you did not install the R software yet,you can download R >= 3.5.0  from http
 
 ### Installation
      
+LargeMetabo package depends on several packages, which can be installed using the following commands in an R session:
+
+    install.packages(c("corrplot", "e1071", "factoextra", "FSelector", "genefilter", "ggfortify", "ggplot2", "igraph", "MASS", "mixOmics", "SOMbrero", "varSelRF"))
+    
+    if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+    BiocManager::install(c("CluMSID","genefilter","ropls","siggenes", "GenomeInfoDbData"))
+    
+    if (!require("devtools")) install.packages("devtools")
+    devtools::install_github("rstudio/d3heatmap")
+
 The LargeMetabo package is provided through GitHub. In order to install it, devtools package available in CRAN (https://cran.r-project.org/) is required. To install devtools, the user must type the following commands in an R session:
     
     install.packages("devtools")
