@@ -275,9 +275,3 @@ Enrich_Plot(dbChoice, EnrichResultList)
 
 
 
-
-
-
-
-
-
