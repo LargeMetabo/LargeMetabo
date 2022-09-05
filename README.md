@@ -11,7 +11,8 @@ If you did not install the R software yet,you can download R >= 3.5.0  from http
      
 LargeMetabo package depends on several packages, which can be installed using the following commands in an R session:
 
-    install.packages(c("corrplot", "e1071", "factoextra", "FSelector", "genefilter", "ggfortify", "ggplot2", "igraph", "MASS", "mixOmics", "SOMbrero", "varSelRF"))
+    install.packages(c("corrplot", "e1071", "factoextra", "FSelector", "genefilter", "ggfortify", "ggplot2", "igraph", 
+                       "MASS", "mixOmics", "SOMbrero", "varSelRF"))
     
     if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
     BiocManager::install(c("CluMSID","genefilter","ropls","siggenes", "GenomeInfoDbData"))
