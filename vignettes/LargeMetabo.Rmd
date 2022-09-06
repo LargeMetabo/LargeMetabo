@@ -10,7 +10,7 @@ vignette: >
   %\VignetteDepends{LargeMetabo, magrittr, dplyr, readr}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
