@@ -172,7 +172,7 @@ The `Metabo_Annotation()` function requires several arguments:
 
 ```{r Annotation_package_1, warning=FALSE, message=FALSE}
 AnnotaMS <- AnnotaData$AnnotaMS
-MetaboAResult <- Metabo_Annotation(AnnotaMS, masstole = 10, toleUnit = 1, annotaDB = "metlin",
+MetaboAResult <- Metabo_Annotation(AnnotaMS, masstole = 0.05, toleUnit = 1, annotaDB = "metlin",
                                    ionMode  = "pos")
 MetaboAResult$`M+H-2H2O`[1:5,]
 ```
