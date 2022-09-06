@@ -27,7 +27,7 @@ The LargeMetabo package is provided through GitHub. In order to install it, devt
 
 Once devtools package has been installed, the user can install LargeMetabo package by typing the following commands in an R session:
 
-    install_github("LargeMetabo/LargeMetabo", force = TRUE)
+    install_github("LargeMetabo/LargeMetabo", force = TRUE, build_vignettes = TRUE)
     library(LargeMetabo)
 
 ### Data Integration for Multiple Analytical Experiments
