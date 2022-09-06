@@ -2,9 +2,6 @@ library(LargeMetabo)
 context("LargeMetabo: an out-of-the-box tool for processing and analyzing large-scale metabolomic data")
 
 
-
-
-
 #### Biomarker identification
 
 markers <- Marker_Assess(t(iris[1:100,1:4]), as.numeric(iris[1:100,5]), method = "PLS-DA")
