@@ -67,7 +67,7 @@ In the marker identification step, there are 13 popular strategies to identify m
 When performing metabolite annotation for primary mass spectrometry (MS1), a compound list containing the studied m/z features should be properly provided. An example input for metabolite annotation for primary mass spectrometry is provided in the LargeMetabo package.
 
     AnnotaMS <- AnnotaData$AnnotaMS
-    MetaboAResult <- Metabo_Annotation(AnnotaMS, masstole = 10, toleUnit = 1, annotaDB = "metlin",
+    MetaboAResult <- Metabo_Annotation(AnnotaMS, masstole = 0.05, toleUnit = 1, annotaDB = "metlin",
                                    ionMode  = "pos")
     MetaboAResult$`M+H-2H2O`[1:5,]
 
