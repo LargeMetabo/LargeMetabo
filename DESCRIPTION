@@ -3,8 +3,14 @@ Type: Package
 Title: LargeMetabo: an out-of-the-box tool for processing and analyzing large-scale metabolomic data
 Version: 0.1.0
 Author: Qingxia Yang
-Maintainer: Qingxia Yang <yangqx@cqu.edu.cn>
-Depends: R (>= 3.5.0), dynamicTreeCut (>= 1.62), fastcluster
+Maintainer: Qingxia Yang <yangqx@njupt.edu.cn>
+Depends: R (>= 3.5.0), dynamicTreeCut (>= 1.62), fastclusterCopyright <2018> <TOBIAS DEPKE>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Imports: AUC, genefilter, d3heatmap, ggplot2, ggfortify, factoextra, igraph, FSelector, varSelRF, corrplot, mixOmics, ropls, CluMSID, siggenes, e1071, SOMbrero, sampling, magrittr, dplyr, readr, knitr
 Description: CluMSID, genefilter, ropls and siggenes are available on Bioconductor, d3heatmap is available on GitHub, and the rest packages including AUC, corrplot, e1071, factoextra, FSelector, ggfortify, ggplot2, igraph, MASS, mixOmics, sampling, SOMbrero and varSelRF are available on CRAN.
 License: MIT + file LICENSE
